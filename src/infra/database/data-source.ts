@@ -5,6 +5,10 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 config({ path: resolve(process.cwd(), 'keys/.env') });
 
+/**
+ * TypeORM DataSource instance.
+ * Required for CLI operations like generating or running migrations.
+ */
 export const AppDataSource = new DataSource({
   type: 'postgres',
   host: process.env.DB_HOST,

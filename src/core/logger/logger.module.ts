@@ -5,6 +5,10 @@ import { Environment } from '#config/shared/enums/environment.enum';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_CONFIG_KEY, AppConfigDto } from '#config/configs/app.config';
 
+/**
+ * Global Logger Module.
+ * Configures pino-logger for the application based on the current environment.
+ */
 @Module({
   imports: [
     PinoLoggerModule.forRootAsync({

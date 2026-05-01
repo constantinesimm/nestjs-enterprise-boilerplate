@@ -9,6 +9,10 @@ import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 import { ApplicationModule } from '#app/application.module';
 import { AppConfigDto, APP_CONFIG_KEY } from '#config/configs/app.config';
 
+/**
+ * Bootstrap the NestJS application.
+ * Configures Fastify, logging, and global settings.
+ */
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     ApplicationModule,
@@ -32,7 +36,7 @@ async function bootstrap() {
 
   app.enableShutdownHooks();
 
-  // Запускаємо додаток
+  // Start the application
   await app.listen(appConfig.appPort, appConfig.appHost);
 
   logger.log(

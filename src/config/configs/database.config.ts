@@ -4,6 +4,10 @@ import { registerConfig } from '#config/utils/config.loader';
 
 export const DATABASE_CONFIG_KEY = 'database';
 
+/**
+ * Data Transfer Object for Database Configuration.
+ * Validates environment variables required for the database connection.
+ */
 export class DatabaseConfigDto {
   @Expose({ name: 'DB_HOST' })
   @IsString()

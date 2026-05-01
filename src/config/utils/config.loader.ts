@@ -6,6 +6,14 @@ import { createConfig } from '#config/utils/config.factory';
 
 type ConfigRegistration = ConfigFactory<object> & { KEY: string };
 
+/**
+ * Registers a configuration object with a specific token.
+ * Uses NestJS's registerAs and the custom createConfig factory.
+ *
+ * @param token - The unique token for the configuration
+ * @param dto - The DTO class to validate the configuration against
+ * @returns A registered configuration object
+ */
 export function registerConfig<T extends object>(
   token: string,
   dto: ClassConstructor<T>,
@@ -13,6 +21,12 @@ export function registerConfig<T extends object>(
   return registerAs(token, (): T => createConfig(dto));
 }
 
+/**
+ * Dynamically discovers and loads all configuration files in the config directory.
+ * Scans for *.config.ts or *.config.js files and extracts exported configurations.
+ *
+ * @returns An array of registered configuration objects
+ */
 export function discoverConfigs(): ConfigRegistration[] {
   const configDir = join(__dirname, '../configs');
 

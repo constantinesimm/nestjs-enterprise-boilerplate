@@ -12,6 +12,10 @@ import { AppConfigDto, APP_CONFIG_KEY } from '#config/configs/app.config';
 import { Environment } from '#config/shared/enums/environment.enum';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
+/**
+ * Database Infrastructure Module.
+ * Configures TypeORM for PostgreSQL using the validated environment configurations.
+ */
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({

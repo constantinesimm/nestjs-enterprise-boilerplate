@@ -7,6 +7,10 @@ import { Environment } from '#config/shared/enums/environment.enum';
 
 export const APP_CONFIG_KEY = 'app';
 
+/**
+ * Data Transfer Object for Application Configuration.
+ * Validates core application environment variables.
+ */
 export class AppConfigDto {
   @Expose({ name: 'NODE_ENV' })
   @IsEnum(Environment)

@@ -3,6 +3,14 @@ import { plainToInstance } from 'class-transformer';
 import { ClassConstructor } from 'class-transformer/types/interfaces';
 import { validateSync, ValidationError } from 'class-validator';
 
+/**
+ * Factory function to create and validate a configuration object from environment variables.
+ * Uses class-transformer to instantiate the DTO and class-validator to validate it.
+ * Throws an error and logs if the configuration is invalid.
+ *
+ * @param dto - The DTO class constructor representing the expected configuration structure
+ * @returns The validated configuration instance
+ */
 export function createConfig<T extends object>(dto: ClassConstructor<T>): T {
   const logger = new Logger('ConfigFactory');
 
