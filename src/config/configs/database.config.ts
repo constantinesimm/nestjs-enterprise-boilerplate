@@ -1,5 +1,6 @@
 import { Expose } from 'class-transformer';
 import { IsNumber, IsString, MinLength } from 'class-validator';
+
 import { registerConfig } from '#config/utils/config.loader';
 
 export const DATABASE_CONFIG_KEY = 'database';

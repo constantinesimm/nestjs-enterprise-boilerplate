@@ -1,16 +1,16 @@
 import { join } from 'node:path';
+
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
-
-import {
-  DatabaseConfigDto,
-  DATABASE_CONFIG_KEY,
-} from '#config/configs/database.config';
-import { AppConfigDto, APP_CONFIG_KEY } from '#config/configs/app.config';
-
-import { Environment } from '#config/shared/enums/environment.enum';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+
+import { APP_CONFIG_KEY, AppConfigDto } from '#config/configs/app.config';
+import {
+  DATABASE_CONFIG_KEY,
+  DatabaseConfigDto,
+} from '#config/configs/database.config';
+import { Environment } from '#config/shared/enums/environment.enum';
 
 /**
  * Database Infrastructure Module.

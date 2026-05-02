@@ -1,6 +1,8 @@
 import { resolve } from 'node:path';
+
 import { DynamicModule, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+
 import { discoverConfigs } from '#config/utils/config.loader';
 
 /**
@@ -10,12 +12,12 @@ import { discoverConfigs } from '#config/utils/config.loader';
 @Module({})
 export class ConfigurationModule {
   static async forRoot(): Promise<DynamicModule> {
-    const configs = await discoverConfigs();
+    const configs = discoverConfigs();
 
     return {
       module: ConfigurationModule,
       imports: [
-        ConfigModule.forRoot({
+        await ConfigModule.forRoot({
           isGlobal: true,
           envFilePath: resolve(process.cwd(), 'keys/.env'),
           load: configs,

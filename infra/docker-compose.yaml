@@ -1,17 +1,68 @@
-version: '3.8'
-
 services:
+  api:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: boilerplate-api
+    environment:
+      - NODE_ENV=production
+      - APP_HOST=0.0.0.0
+      - APP_PORT=${APP_PORT:-5555}
+      - APP_NAME=${APP_NAME:-EnterpriseApp}
+      - APP_GLOBAL_PREFIX=${APP_GLOBAL_PREFIX:-api/v1}
+      - DB_HOST=postgres
+      - DB_PORT=${DB_PORT:-5432}
+      - DB_USER=${DB_USER:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD:-postgres}
+      - DB_NAME=${DB_NAME:-enterprise_db}
+      - SWAGGER_ENABLED=${SWAGGER_ENABLED:-true}
+      - SWAGGER_PATH=${SWAGGER_PATH:-api/docs}
+      - METRICS_ENABLED=${METRICS_ENABLED:-true}
+      - METRICS_PATH=${METRICS_PATH:-/metrics}
+    ports:
+      - "${APP_PORT:-5555}:${APP_PORT:-5555}"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
   postgres:
-    image: postgres:16-alpine
+    image: postgres:15-alpine
     container_name: boilerplate-postgres
     environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-enterprise_db}
     ports:
-      - '${DB_PORT:-5432}:5432'
+      - "${DB_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: boilerplate-prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    environment:
+      - APP_PORT=${APP_PORT:-5555}
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--enable-feature=envvar-expansion'
+    ports:
+      - '9090:9090'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: boilerplate-grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    ports:
+      - '${GRAFANA_PORT:-9030}:3000'
+    depends_on:
+      - prometheus
     restart: unless-stopped
 
 volumes:

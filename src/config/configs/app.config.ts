@@ -1,9 +1,9 @@
 // src/config/app.config.ts
 import { Expose } from 'class-transformer';
 import { IsEnum, IsNumber, IsString, MinLength } from 'class-validator';
-import { registerConfig } from '#config/utils/config.loader';
 
 import { Environment } from '#config/shared/enums/environment.enum';
+import { registerConfig } from '#config/utils/config.loader';
 
 export const APP_CONFIG_KEY = 'app';
 

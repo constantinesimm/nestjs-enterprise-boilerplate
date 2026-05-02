@@ -3,20 +3,20 @@ import { IsBoolean, IsString } from 'class-validator';
 
 import { registerConfig } from '#config/utils/config.loader';
 
-export const SWAGGER_CONFIG_KEY = 'swagger';
+export const METRICS_CONFIG_KEY = 'metrics';
 
-export class SwaggerConfigDto {
-  @Expose({ name: 'SWAGGER_ENABLED' })
+export class MetricsConfigDto {
+  @Expose({ name: 'METRICS_ENABLED' })
   @Type(() => Boolean)
   @IsBoolean()
   public readonly enabled!: boolean;
 
-  @Expose({ name: 'SWAGGER_PATH' })
+  @Expose({ name: 'METRICS_PATH' })
   @IsString()
   public readonly path!: string;
 }
 
-export const swaggerConfig = registerConfig(
-  SWAGGER_CONFIG_KEY,
-  SwaggerConfigDto,
+export const metricsConfig = registerConfig(
+  METRICS_CONFIG_KEY,
+  MetricsConfigDto,
 );

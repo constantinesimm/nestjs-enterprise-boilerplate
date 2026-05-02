@@ -1,20 +1,25 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
+import { RequestMethod } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import { ConfigService } from '@nestjs/config';
-import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 
 import { ApplicationModule } from '#app/application.module';
-import { AppConfigDto, APP_CONFIG_KEY } from '#config/configs/app.config';
+import { APP_CONFIG_KEY, AppConfigDto } from '#config/configs/app.config';
 import {
-  SwaggerConfigDto,
+  METRICS_CONFIG_KEY,
+  MetricsConfigDto,
+} from '#config/configs/metrics.config';
+import {
   SWAGGER_CONFIG_KEY,
+  SwaggerConfigDto,
 } from '#config/configs/swagger.config';
 
 /**
@@ -35,12 +40,31 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const appConfig = configService.get<AppConfigDto>(APP_CONFIG_KEY);
   const swaggerConfig = configService.get<SwaggerConfigDto>(SWAGGER_CONFIG_KEY);
+  const metricsConfig = configService.get<MetricsConfigDto>(METRICS_CONFIG_KEY);
 
-  if (!appConfig || !swaggerConfig) {
-    throw new Error('🚨 Application or Swagger configuration is missing!');
+  if (!appConfig) {
+    throw new Error('🚨 Application configuration is missing!');
+  }
+  if (!swaggerConfig) {
+    throw new Error('🚨 Swagger configuration is missing!');
+  }
+  if (!metricsConfig) {
+    throw new Error('🚨 Metrics configuration is missing!');
   }
 
-  app.setGlobalPrefix(appConfig.globalPrefix);
+  const metricsPath = metricsConfig.path.startsWith('/')
+    ? metricsConfig.path
+    : `/${metricsConfig.path}`;
+
+  // --- Global Prefix Setup ---
+  app.setGlobalPrefix(appConfig.globalPrefix, {
+    exclude: [
+      {
+        path: metricsPath,
+        method: RequestMethod.GET,
+      },
+    ],
+  });
 
   // --- Swagger Setup ---
   if (swaggerConfig.enabled) {
