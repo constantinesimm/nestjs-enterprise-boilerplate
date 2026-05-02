@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { LoggerModule as PinoLoggerModule } from 'nestjs-pino';
 
-import { Environment } from '#config/shared/enums/environment.enum';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_CONFIG_KEY, AppConfigDto } from '#config/configs/app.config';
+import { Environment } from '#config/shared/enums/environment.enum';
 
 /**
  * Global Logger Module.

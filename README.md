@@ -1,98 +1,200 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+<div align="center">
+  <h1>🚀 NestJS Enterprise Boilerplate</h1>
+  <p>A robust, scalable, and highly-opinionated enterprise-grade boilerplate for building modern server-side applications using NestJS, Fastify, and PostgreSQL.</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+  <p>
+    <a href="https://nestjs.com" target="_blank"><img src="https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white" alt="NestJS"></a>
+    <a href="https://fastify.io" target="_blank"><img src="https://img.shields.io/badge/Fastify-000000?style=for-the-badge&logo=fastify&logoColor=white" alt="Fastify"></a>
+    <a href="https://www.postgresql.org" target="_blank"><img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL"></a>
+    <a href="https://pnpm.io" target="_blank"><img src="https://img.shields.io/badge/pnpm-F69220?style=for-the-badge&logo=pnpm&logoColor=white" alt="pnpm"></a>
+    <a href="https://swagger.io" target="_blank"><img src="https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black" alt="Swagger"></a>
+    <a href="https://prometheus.io" target="_blank"><img src="https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=prometheus&logoColor=white" alt="Prometheus"></a>
+  </p>
+</div>
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## ✨ Features
 
-## Description
+- **Blazing Fast**: Uses **Fastify** as the underlying HTTP adapter for maximum performance.
+- **Enterprise Architecture**: Domain-Driven Design (DDD) & Modular Monolith architecture, preparing your codebase for future scalability and easy extraction to microservices.
+- **Type-Safe Database**: Fully integrated **TypeORM** with **PostgreSQL**.
+- **Observability out of the box**:
+  - **Structured Logging**: Pre-configured `nestjs-pino` and `pino-pretty` for highly readable local logs and structured JSON logs for production.
+  - **Metrics**: **Prometheus** metrics export pre-configured (`@willsoto/nestjs-prometheus`).
+  - **Grafana**: Ready-to-use Grafana dashboard configured via Docker Compose.
+- **API Documentation**: Automated **Swagger / OpenAPI 3.0** documentation setup.
+- **Command Query Responsibility Segregation (CQRS)**: NestJS CQRS module included to enforce clear separation of concerns.
+- **Validation**: Global pipes set up with `class-validator` and `class-transformer`.
+- **Infrastructure Ready**: Comprehensive `docker-compose.yaml` to instantly spin up the API, Database, Prometheus, and Grafana.
+- **Developer Experience (DX)**:
+  - **Strict Linting**: `eslint` (flat config) and `prettier`.
+  - **Git Hooks**: Pre-configured `husky` + `commitlint` + `lint-staged` for code quality on commit.
+  - **Testing**: Pre-configured **Jest** setups for unit and end-to-end testing.
+  - **Path Aliases**: Clean imports mapped natively in `package.json` (`#app`, `#modules`, `#infra`, etc.).
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+---
 
-## Project setup
+## 🏗 Architecture & Folder Structure
 
-```bash
-$ pnpm install
+The application follows a structured modular architecture:
+
+```
+src/
+├── app/             # Main Application Module unifying all global imports
+├── apps/            # For specific app contexts (e.g., workers, crons)
+├── config/          # Centralized configuration (App, DB, Swagger, Metrics)
+├── core/            # Global/Core utilities: Filters, Guards, Decorators, Interceptors, Logger
+├── infra/           # Infrastructure layer: Database, External Services, Metrics providers
+└── modules/         # Business Logic Domains / Use Cases
+    └── users/       # Example Domain Module (Controllers, Services, CQRS Handlers)
 ```
 
-## Compile and run the project
+**Path Aliases:**
+Instead of relative `../../../` paths, the project uses native Node.js package imports defined in `package.json`:
+- `#app/*` -> `src/app/*`
+- `#apps/*` -> `src/apps/*`
+- `#config/*` -> `src/config/*`
+- `#core/*` -> `src/core/*`
+- `#infra/*` -> `src/infra/*`
+- `#modules/*` -> `src/modules/*`
+
+---
+
+## 🚀 Getting Started
+
+### 1. Prerequisites
+- **Node.js**: `>=24.15.0`
+- **pnpm**: `>=10.33.2`
+- **Docker & Docker Compose** (for infrastructure)
+
+### 2. Installation
+
+Clone the repository and install dependencies using `pnpm`:
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+# Install dependencies
+pnpm install
 ```
 
-## Run tests
+### 3. Environment Variables
+
+Create a `.env` file in the `keys/` directory based on the default values needed for the infrastructure.
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+# Example keys/.env variables
+APP_PORT=5555
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=postgres
+DB_NAME=enterprise_db
 ```
 
-## Deployment
+### 4. Running the Infrastructure (Docker Compose)
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Spin up PostgreSQL, Prometheus, and Grafana with one command:
 
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+# Start all infrastructure dependencies (DB, Prometheus, Grafana)
+pnpm run infra:up
+
+# Start only the database
+pnpm run infra:db:up
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### 5. Running the Application
 
-## Resources
+```bash
+# Development mode
+pnpm run start
 
-Check out a few resources that may come in handy when working with NestJS:
+# Watch mode (Hot Reload)
+pnpm run start:dev
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+# Production mode
+pnpm run start:prod
+```
 
-## Support
+Once running, you can access:
+- **API Base URL**: `http://localhost:5555/api/v1`
+- **Swagger Documentation**: `http://localhost:5555/api/docs`
+- **Prometheus Metrics**: `http://localhost:5555/metrics`
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+---
 
-## Stay in touch
+## 💾 Database Migrations (TypeORM)
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+TypeORM is configured to handle schema migrations smoothly.
 
-## License
+```bash
+# Generate a new migration based on entity changes
+pnpm run migration:generate --name=AddUsersTable
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+# Create an empty migration file
+pnpm run migration:create --name=ManualMigration
+
+# Run pending migrations
+pnpm run migration:run
+
+# Revert the last applied migration
+pnpm run migration:revert
+```
+
+---
+
+## 🐳 Docker Infrastructure Services
+
+The boilerplate provides an `infra/docker-compose.yaml` file to simplify local development and deployment. 
+
+Available scripts:
+- `pnpm run infra:up` - Starts all services (API, Postgres, Prometheus, Grafana).
+- `pnpm run infra:down` - Stops and removes all containers.
+- `pnpm run infra:logs` - Streams logs from all containers.
+
+**Included Services in Docker Compose:**
+1. **API**: The NestJS application itself.
+2. **Postgres**: Application database (`postgres:15-alpine`).
+3. **Prometheus**: Scrapes metrics from the API on port `9090`.
+4. **Grafana**: Visualization of metrics on port `9030`.
+
+---
+
+## 🧪 Testing
+
+Jest is pre-configured for both Unit and E2E testing.
+
+```bash
+# Run unit tests
+pnpm run test
+
+# Run tests in watch mode
+pnpm run test:watch
+
+# Run end-to-end tests
+pnpm run test:e2e
+
+# Generate test coverage report
+pnpm run test:cov
+```
+
+---
+
+## 📝 Code Quality & Git Hooks
+
+This boilerplate strictly enforces code quality standards.
+- **Husky** runs Git Hooks.
+- **Commitlint** enforces Conventional Commits standard (e.g., `feat: add new user module`, `fix: correct database typo`).
+- **Lint-Staged** runs ESLint and Prettier on staged files before they are committed.
+
+```bash
+# Manually run linter
+pnpm run lint
+
+# Manually run formatter
+pnpm run format
+```
+
+---
+
+## 📄 License
+
+This project is licensed under the **UNLICENSED** license. Please update it according to your company's guidelines.

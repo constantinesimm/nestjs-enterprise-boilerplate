@@ -1,7 +1,9 @@
 import { join } from 'node:path';
-import { registerAs, ConfigFactory } from '@nestjs/config';
+
+import { ConfigFactory, registerAs } from '@nestjs/config';
 import { ClassConstructor } from 'class-transformer';
 import { globSync } from 'glob';
+
 import { createConfig } from '#config/utils/config.factory';
 
 type ConfigRegistration = ConfigFactory<object> & { KEY: string };
